@@ -1,14 +1,32 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="color1">
     <ion-title>
-      Ionic Blank
+      Congreso
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+
+  <p align="center"><ion-img src="../assets/imgs/logoC.jpg" width="50" height="50"></ion-img></p>
+  <p align="center" style="color: #07904d">1ER CONGRESO INTERINSTITUCIONAL</p>
+  <p style="font-size: x-small;color: coral" align="center">FINES DE LA EDUCACIÓN EN EL SIGLO XXI Y MODELO EDUCATIVO PARA LA EDUCACIÓN OBLIGARIA EN MÉXICO</p>
+  <br>
+
+  <h1>
+    <button ion-button color="color2" full round (click)="scan()">Ecanear</button>
+  </h1>
+
+  <form [formGroup]="myForm" (ngSubmit)="changeView()" novalidate>
+    <ion-item>
+      <ion-label floating class="my-label">Clave</ion-label>
+      <ion-input type="text" formControlName="Clave"></ion-input>
+    </ion-item>
+
+    <button color="color3" ion-button type="submit" block [disabled]="myForm.invalid">Buscar</button>
+  </form>
+
 </ion-content>
+<ion-footer>
+  <p style="font-size: x-small;color: gray"  align="right">Elaboro: Tecnologias SEIEM</p>
+</ion-footer>
