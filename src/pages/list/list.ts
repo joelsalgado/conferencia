@@ -18,6 +18,7 @@ export class ListPage {
 
   clave : '';
   todo: any;
+  name: any;
 
 
   constructor(public navCtrl: NavController,
@@ -25,7 +26,6 @@ export class ListPage {
               public todoService: TodosProvider,) {
     this.clave = navParams.get('clave');
     console.log(this.clave);
-
     this.actualizar();
   }
 
@@ -43,6 +43,7 @@ export class ListPage {
   actualizar(){
     this.todoService.findUser(this.clave).then((data) => {
       this.todo = data;
+      this.name = data[0].nombre;
       console.log(data);
     });
   }

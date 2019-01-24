@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { TodosProvider } from '../providers/todos/todos';
 import {ListPageModule} from "../pages/list/list.module";
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
+import {LoginPageModule} from "../pages/login/login.module";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {BarcodeScanner} from "@ionic-native/barcode-scanner";
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    ListPageModule
+    ListPageModule,
+    LoginPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -1,0 +1,40 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="color1">
+    <ion-title>Inicio de Sesión</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <p align="center"><ion-img src="../assets/imgs/logoC.jpg" width="50" height="50"></ion-img></p>
+  <p align="center" style="color: #07904d">1ER CONGRESO INTERINSTITUCIONAL</p>
+  <p style="font-size: x-small;color: coral" align="center">FINES DE LA EDUCACIÓN EN EL SIGLO XXI Y MODELO EDUCATIVO PARA LA EDUCACIÓN OBLIGARIA EN MÉXICO</p>
+  <br>
+
+
+
+  <form [formGroup]="myForm" (ngSubmit)="changeView()" novalidate>
+    <ion-item>
+      <ion-label floating class="my-label">Usuario</ion-label>
+      <ion-input type="text" formControlName="username"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating class="my-label">Contraseña</ion-label>
+      <ion-input type="password" formControlName="password"></ion-input>
+    </ion-item>
+
+    <button color="color3" ion-button type="submit" block [disabled]="myForm.invalid">Iniciar Sesión</button>
+  </form>
+
+</ion-content>
+<ion-footer>
+  <p style="font-size: x-small;color: gray"  align="right">Elaboro: Tecnologias SEIEM</p>
+</ion-footer>

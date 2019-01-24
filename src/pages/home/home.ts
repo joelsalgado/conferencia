@@ -42,14 +42,14 @@ export class HomePage {
   changeView(){
     this.Clave = this.myForm.value.Clave;
     console.log(this.Clave);
-    this.navCtrl.setRoot(ListPage, {clave: this.Clave })
+    this.navCtrl.push(ListPage, {clave: this.Clave })
   }
 
   scan(){
     this.barcodeScanner.scan().then((barcodeData) => {
 
         console.log(barcodeData.text);
-      this.navCtrl.setRoot(ListPage, {clave: barcodeData.text })
+      this.navCtrl.push(ListPage, {clave: barcodeData.text })
     });
 
 

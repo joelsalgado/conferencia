@@ -14,6 +14,11 @@ export class TodosProvider {
   data: any;
   db: any;
   remote: any;
+  data2: any;
+  db2: any;
+  remote2: any;
+  username = '';
+  password = '';
 
   constructor() {
     console.log('Hello TodosProvider Provider');
@@ -30,6 +35,12 @@ export class TodosProvider {
     };
 
     this.db.sync(this.remote, options);
+
+    this.db2 = new PouchDB('users');
+
+    this.remote2 = 'http://192.168.2.5:5984/users';
+
+    this.db2.sync(this.remote2, options);
   }
 
   getTodos() {
@@ -82,6 +93,63 @@ export class TodosProvider {
     })
   }
 
+  getUsers() {
+
+    if (this.data2) {
+      return Promise.resolve(this.data2);
+    }
+
+    return new Promise(resolve => {
+
+      this.db2.allDocs({
+
+        include_docs: true
+
+      }).then((result) => {
+
+        this.data2 = [];
+
+        let docs = result.rows.map((row) => {
+          this.data2.push(row.doc);
+        });
+
+        resolve(this.data2);
+
+        this.db2.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
+          this.handleChange2(change);
+        });
+      }).catch((error) => {
+
+        console.log(error);
+
+      });
+
+    });
+
+  }
+
+  loginUser(user, pass) {
+    this.username= user;
+    this.password = pass;
+    return new Promise((resolve, reject)=>{
+      this.db2.find({
+        selector: {
+          username: this.username,
+          password: this.password
+        }
+      }).then((res) => {
+        if(res.docs[0]){
+          resolve(res.docs);
+        }else{
+          resolve(0);
+        }
+
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
 
 
   updateTodo(todo){
@@ -121,6 +189,38 @@ export class TodosProvider {
       //A document was added
       else {
         this.data.push(change.doc);
+      }
+
+    }
+  }
+
+  handleChange2(change){
+    let changedDoc = null;
+    let changedIndex = null;
+
+    this.data2.forEach((doc, index) => {
+
+      if(doc._id === change.id){
+        changedDoc = doc;
+        changedIndex = index;
+      }
+
+    });
+
+    //A document was deleted
+    if(change.deleted){
+      this.data2.splice(changedIndex, 1);
+    }
+    else {
+
+      //A document was updated
+      if(changedDoc){
+        this.data2[changedIndex] = change.doc;
+      }
+
+      //A document was added
+      else {
+        this.data2.push(change.doc);
       }
 
     }
