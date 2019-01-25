@@ -35,6 +35,7 @@ export class ConferenciasPage {
     this.todoService.getConferencias().then((data) => {
       console.log(data);
       this.conferencias = data;
+
     });
   }
 
@@ -43,7 +44,12 @@ export class ConferenciasPage {
   }
 
   changeView(conferencia){
-    this.navCtrl.push(HomePage, {username:this.user, userid: this.userid, conferencia : conferencia });
+    this.navCtrl.push(HomePage, {
+      username:this.user,
+      userid: this.userid,
+      conferencia : conferencia,
+      conferenciaid: conferencia.id
+    });
   }
 
 }
