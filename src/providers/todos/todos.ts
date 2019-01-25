@@ -14,9 +14,15 @@ export class TodosProvider {
   data: any;
   db: any;
   remote: any;
+
   data2: any;
   db2: any;
   remote2: any;
+
+  data3: any;
+  db3: any;
+  remote3: any;
+
   username = '';
   password = '';
 
@@ -37,10 +43,12 @@ export class TodosProvider {
     this.db.sync(this.remote, options);
 
     this.db2 = new PouchDB('users');
-
     this.remote2 = 'http://192.168.2.5:5984/users';
-
     this.db2.sync(this.remote2, options);
+
+    this.db3 = new PouchDB('conferencias');
+    this.remote3 = 'http://192.168.2.5:5984/conferencias';
+    this.db3.sync(this.remote3, options);
   }
 
   getTodos() {
@@ -59,7 +67,7 @@ export class TodosProvider {
 
         this.data = [];
 
-        let docs = result.rows.map((row) => {
+        result.rows.map((row) => {
           this.data.push(row.doc);
         });
 
@@ -93,6 +101,25 @@ export class TodosProvider {
     })
   }
 
+  findUser2(userid, actividad) {
+    return new Promise((resolve, reject)=>{
+      this.db.find({
+        selector: {
+          clave: userid,
+          activity_id: actividad
+        }
+      }).then((res) => {
+        if(res.docs[0]){
+          resolve(res.docs);
+        }else{
+          resolve(0);
+        }
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
   getUsers() {
 
     if (this.data2) {
@@ -109,7 +136,7 @@ export class TodosProvider {
 
         this.data2 = [];
 
-        let docs = result.rows.map((row) => {
+        result.rows.map((row) => {
           this.data2.push(row.doc);
         });
 
@@ -149,6 +176,43 @@ export class TodosProvider {
       })
     })
   }
+
+  getConferencias() {
+
+    if (this.data3) {
+      return Promise.resolve(this.data3);
+    }
+
+    return new Promise(resolve => {
+
+      this.db3.allDocs({
+
+        include_docs: true
+
+      }).then((result) => {
+
+        this.data3 = [];
+
+        result.rows.map((row) => {
+          this.data3.push(row.doc);
+        });
+
+        resolve(this.data3);
+
+        this.db3.changes({live: true, since: 'now', include_docs: true}).on('change', (change) => {
+          this.handleChange3(change);
+        });
+      }).catch((error) => {
+
+        console.log(error);
+
+      });
+
+    });
+
+  }
+
+
 
 
 
@@ -221,6 +285,38 @@ export class TodosProvider {
       //A document was added
       else {
         this.data2.push(change.doc);
+      }
+
+    }
+  }
+
+  handleChange3(change){
+    let changedDoc = null;
+    let changedIndex = null;
+
+    this.data3.forEach((doc, index) => {
+
+      if(doc._id === change.id){
+        changedDoc = doc;
+        changedIndex = index;
+      }
+
+    });
+
+    //A document was deleted
+    if(change.deleted){
+      this.data3.splice(changedIndex, 1);
+    }
+    else {
+
+      //A document was updated
+      if(changedDoc){
+        this.data3[changedIndex] = change.doc;
+      }
+
+      //A document was added
+      else {
+        this.data3.push(change.doc);
       }
 
     }

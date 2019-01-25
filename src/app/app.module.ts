@@ -10,6 +10,7 @@ import { TodosProvider } from '../providers/todos/todos';
 import {ListPageModule} from "../pages/list/list.module";
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
 import {LoginPageModule} from "../pages/login/login.module";
+import {ConferenciasPageModule} from "../pages/conferencias/conferencias.module";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {LoginPageModule} from "../pages/login/login.module";
     BrowserModule,
     IonicModule.forRoot(MyApp),
     ListPageModule,
-    LoginPageModule
+    LoginPageModule,
+    ConferenciasPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

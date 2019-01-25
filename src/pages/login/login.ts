@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, ToastController, ToastOptions} from 'ionic-angular';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TodosProvider} from "../../providers/todos/todos";
-import {ListPage} from "../list/list";
-import {HomePage} from "../home/home";
+import {ConferenciasPage} from "../conferencias/conferencias";
 /**
  * Generated class for the LoginPage page.
  *
@@ -52,7 +51,7 @@ export class LoginPage {
     this.todoService.loginUser(this.username,this.password).then((data) => {
       if(data != 0){
         console.log(data);
-        this.navCtrl.setRoot(HomePage);
+        this.navCtrl.setRoot(ConferenciasPage, {username:this.username, userid: data[0].id });
       }else{
         this.toastOpcion = {
           message: 'Usuario o contraseña incorrecta',
@@ -63,9 +62,6 @@ export class LoginPage {
 
       }
     });
-
-
-
 
 
   }
