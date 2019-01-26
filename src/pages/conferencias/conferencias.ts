@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
 import {TodosProvider} from "../../providers/todos/todos";
 import {HomePage} from "../home/home";
+import moment from 'moment';
 
 /**
  * Generated class for the ConferenciasPage page.
@@ -21,6 +22,7 @@ export class ConferenciasPage {
   userid:'';
   conferencias:any;
   myDate: String;
+  myDate2: String;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -30,13 +32,19 @@ export class ConferenciasPage {
     this.user = navParams.get('username');
     this.userid = navParams.get('userid');
 
-    this.myDate = new Date().toISOString();
+    this.myDate = new Date().toLocaleString('en-ZA', { timeZone: 'America/Mexico_City'}).substring(0, 10);
+    this.myDate2 = new Date().toLocaleString('en-ZA', { timeZone: 'America/Mexico_City'});
 
     this.todoService.getConferencias().then((data) => {
       console.log(data);
       this.conferencias = data;
 
     });
+
+
+    let diff = moment('11:10', 'HH:mm').diff(moment('10:50', 'HH:mm'))
+    let d = moment.duration(diff);
+    console.log(Math.floor(d.asHours()) + moment.utc(diff).format("mm"));
   }
 
   ionViewDidLoad() {
@@ -50,6 +58,12 @@ export class ConferenciasPage {
       conferencia : conferencia,
       conferenciaid: conferencia.id
     });
+  }
+
+  antes(){
+    let diff = moment('11:10', 'HH:mm').diff(moment('10:50', 'HH:mm'))
+    let d = moment.duration(diff);
+    return(Math.floor(d.asHours()) + moment.utc(diff).format("mm"));
   }
 
 }
