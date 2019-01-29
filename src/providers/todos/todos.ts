@@ -101,6 +101,21 @@ export class TodosProvider {
     })
   }
 
+  findSalon2(actividad) {
+    return new Promise((resolve, reject)=>{
+      this.db.find({
+        selector: {
+          activity_id: actividad,
+          status: 1
+        }
+      }).then((res) => {
+        resolve(res.docs);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
   findUser2(userid, actividad) {
     return new Promise((resolve, reject)=>{
       this.db.find({

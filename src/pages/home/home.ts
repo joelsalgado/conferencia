@@ -3,6 +3,7 @@ import {AlertController, NavController, NavParams, ToastController, ToastOptions
 import {TodosProvider} from "../../providers/todos/todos";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import moment from 'moment';
 
 @Component({
   selector: 'page-home',
@@ -12,11 +13,13 @@ export class HomePage {
 
   todos: any;
   todo: any;
+  counts: Number;
   myForm: FormGroup;
   Clave: '';
   username: '';
   userid: '';
-  conferencia = '';
+  conferencia = Object;
+  inicio = '';
   conferenciaid = 0;
   toastOpcion: ToastOptions;
 
@@ -29,11 +32,20 @@ export class HomePage {
               private toast: ToastController,
               public alertController: AlertController) {
 
+
+
     this.username = navParams.get('username');
     this.userid = navParams.get('userid');
     this.conferencia = navParams.get('conferencia');
     this.conferenciaid = navParams.get('conferenciaid');
+    this.inicio = navParams.get('inicio');
 
+    this.ver();
+    this.count(this.conferenciaid);
+
+    if(this.conferenciaid > this.counts){
+      console.log('Hay lugares');
+    }
 
     this.myForm = this.fb.group({
       Clave: ['', [Validators.required]],
@@ -64,6 +76,8 @@ export class HomePage {
   }
 
   alerts(user_id){
+    this.ver();
+    this.count(this.conferenciaid);
     this.todoService.findUser2(user_id, this.conferenciaid).then((data) => {
       if(data != 0){
         this.myForm.reset();
@@ -116,5 +130,46 @@ export class HomePage {
     });
 
   }
+
+  antes(value){
+    let x = this.hora()+'';
+    let diff = moment(value, 'HH:mm').diff(moment(x, 'HH:mm'))
+    let d = moment.duration(diff);
+    //console.log(Number(Math.floor(d.asHours()) + moment.utc(diff).format("mm")));
+    return(Number(Math.floor(d.asHours()) + moment.utc(diff).format("mm")));
+  }
+
+
+  despues2(value){
+    let x = this.hora()+'';
+    let diff = moment(x, 'HH:mm').diff(moment(value, 'HH:mm'))
+    let d = moment.duration(diff);
+    //console.log(Number(Math.floor(d.asHours()) + moment.utc(diff).format("mm")));
+    return(Number(Math.floor(d.asHours()) + moment.utc(diff).format("mm")));
+  }
+
+  hora(){
+    return new Date().toLocaleString('en-ZA', { timeZone: 'America/Mexico_City'}).substring(12, 17);
+  }
+
+  ver(){
+    console.log(this.antes(this.inicio));
+    if(this.antes(this.inicio) <= 159 && this.despues2(this.inicio) <= 159){
+      console.log('hello');
+    }else{
+      this.navCtrl.pop();
+    }
+  }
+
+  count(actividad){
+      this.todoService.findSalon2(actividad).then((data) => {
+        //console.log(data);
+        this.counts = Object.keys(data).length;
+
+
+      });
+
+  }
+
 
 }
