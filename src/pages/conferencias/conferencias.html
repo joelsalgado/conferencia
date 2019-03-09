@@ -7,42 +7,45 @@
 <ion-header>
 
   <ion-navbar color="color1">
-    <ion-title>Conferencias</ion-title>
+    <ion-title>Conferencias </ion-title>
+    <ion-buttons end> <button  color="color1" (click)="salir()"> <ion-icon name="log-out"></ion-icon>  </button> </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="circles"
+      refreshingText="Actualizando...">
+    </ion-refresher-content>
+  </ion-refresher>
   <p align="center"><ion-img src="../assets/imgs/logoC.jpg" width="50" height="50"></ion-img></p>
   <p align="center" style="color: #07904d">1ER CONGRESO INTERINSTITUCIONAL</p>
   <p style="font-size: x-small;color: coral" align="center">FINES DE LA EDUCACIÓN EN EL SIGLO XXI Y MODELO EDUCATIVO PARA LA EDUCACIÓN OBLIGARIA EN MÉXICO</p>
   <br>
-  <div *ngIf="myDate == '2019/01/24'">
+  <div *ngIf="myDate == '' ">
     <ion-item-divider color="color2">Día 24/01/2019</ion-item-divider>
     <ion-list>
-
-      <ion-item-sliding *ngFor="let conferencia of conferencias | async">
-        <ion-item text-wrap *ngIf="conferencia.fecha == '2019-01-24'">
-          {{conferencia.descripcion}}
-          <p>{{conferencia.inicio}} - {{conferencia.fin}}</p>
-        </ion-item>
-
-        <ion-item-options side="right">
-          <button ion-button icon-only color="light" (click)="changeView(conferencia)">
-            <ion-icon name="send"></ion-icon>
+      <ion-item-sliding *ngFor="let conferencia of conferencias">
+        <ion-item text-wrap *ngIf="conferencia.fecha == '2019-01-24'" text-lg-wrap="true">
+          <button ion-item color="color3"  class="app-font-25" (click)='this.changeView(conferencia)' [disabled]="this.despues(conferencia.inicio) > 159">
+            <div>
+              <p>{{conferencia.descripcion}}</p>
+              <p>{{conferencia.inicio}} - {{conferencia.fin}}</p>
+            </div>
           </button>
-        </ion-item-options>
-
-
+        </ion-item>
       </ion-item-sliding>
-
     </ion-list>
   </div>
-  <div *ngIf="myDate == '2019/01/28'">
+
+  <div *ngIf="myDate == myDate">
     <ion-item-divider color="color2">Día 25/01/2019</ion-item-divider>
     <ion-list>
-
       <ion-item-sliding *ngFor="let conferencia of conferencias">
         <ion-item text-wrap *ngIf="conferencia.fecha == '2019-01-25'" text-lg-wrap="true">
           <button ion-item color="color3"  class="app-font-25" (click)='this.changeView(conferencia)' [disabled]="this.despues(conferencia.inicio) > 159">
@@ -52,11 +55,7 @@
             </div>
           </button>
         </ion-item>
-
-
-
       </ion-item-sliding>
-
     </ion-list>
   </div>
 

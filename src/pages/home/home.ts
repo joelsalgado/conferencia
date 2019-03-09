@@ -4,6 +4,7 @@ import {TodosProvider} from "../../providers/todos/todos";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import moment from 'moment';
+import {LoginPage} from "../login/login";
 
 @Component({
   selector: 'page-home',
@@ -53,6 +54,7 @@ export class HomePage {
 
 
   }
+
   ionViewDidLoad(){
 
     this.todoService.getTodos().then((data) => {
@@ -77,7 +79,6 @@ export class HomePage {
 
   alerts(user_id){
     this.ver();
-    this.count(this.conferenciaid);
     this.todoService.findUser2(user_id, this.conferenciaid).then((data) => {
       if(data != 0){
         this.myForm.reset();
@@ -100,6 +101,7 @@ export class HomePage {
                   data[0].status = 1;
                   this.todoService.updateTodo(data[0]);
                   console.log('Confirm Okay');
+                  this.count(this.conferenciaid);
                 }
               }
             ]
@@ -153,12 +155,28 @@ export class HomePage {
   }
 
   ver(){
-    console.log(this.antes(this.inicio));
     if(this.antes(this.inicio) <= 159 && this.despues2(this.inicio) <= 159){
       console.log('hello');
     }else{
       this.navCtrl.pop();
     }
+  }
+
+  doRefresh(event) {
+    console.log('Begin async operation');
+
+    setTimeout(() => {
+      this.count(this.conferenciaid);
+      console.log('Async operation has ended');
+      event.complete();
+      return true;
+    }, 1000);
+  }
+
+  salir(){
+    localStorage.removeItem('userid');
+    localStorage.removeItem('username');
+    this.navCtrl.setRoot(LoginPage);
   }
 
   count(actividad){

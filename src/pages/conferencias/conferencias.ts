@@ -3,6 +3,7 @@ import {IonicPage, NavController, NavParams, ToastController, ToastOptions} from
 import {TodosProvider} from "../../providers/todos/todos";
 import {HomePage} from "../home/home";
 import moment from 'moment';
+import {LoginPage} from "../login/login";
 
 /**
  * Generated class for the ConferenciasPage page.
@@ -18,8 +19,8 @@ import moment from 'moment';
 })
 export class ConferenciasPage {
 
-  user:'';
-  userid:'';
+  user:String;
+  userid:String;
   conferencias:any;
   myDate: String;
   myDate2: String;
@@ -30,8 +31,14 @@ export class ConferenciasPage {
               public todoService: TodosProvider,
               private toast: ToastController) {
 
-    this.user = navParams.get('username');
-    this.userid = navParams.get('userid');
+    if (localStorage.getItem("userid") === null) {
+      this.navCtrl.setRoot(LoginPage);
+    }else{
+      this.user = localStorage.getItem('username');
+      this.userid = localStorage.getItem("userid");
+    }
+
+
 
     this.myDate = new Date().toLocaleString('en-ZA', { timeZone: 'America/Mexico_City'}).substring(0, 10);
     this.myDate2 = this.hora();
@@ -41,8 +48,21 @@ export class ConferenciasPage {
 
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ConferenciasPage');
+  doRefresh(event) {
+    console.log('Begin async operation');
+
+    setTimeout(() => {
+      this.todo();
+      console.log('Async operation has ended');
+      event.complete();
+      return true;
+    }, 1000);
+  }
+
+  salir(){
+    localStorage.removeItem('userid');
+    localStorage.removeItem('username');
+    this.navCtrl.setRoot(LoginPage);
   }
 
   todo(){

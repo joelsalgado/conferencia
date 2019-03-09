@@ -20,7 +20,6 @@ export class LoginPage {
   myForm: FormGroup;
   username: '';
   password: '';
-  users: any;
   toastOpcion: ToastOptions;
 
   constructor(public navCtrl: NavController,
@@ -28,10 +27,12 @@ export class LoginPage {
               public fb: FormBuilder,
               public todoService: TodosProvider,
               private toast: ToastController) {
-    this.todoService.getUsers().then((data) => {
-      console.log(data);
-      this.users = data;
-    });
+
+    if (localStorage.getItem("userid") === null) {
+      console.log('No');
+    }else{
+      this.navCtrl.setRoot(ConferenciasPage);
+    }
 
     this.myForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -51,7 +52,9 @@ export class LoginPage {
     this.todoService.loginUser(this.username,this.password).then((data) => {
       if(data != 0){
         console.log(data);
-        this.navCtrl.setRoot(ConferenciasPage, {username:this.username, userid: data[0].id });
+        localStorage.setItem('userid', data[0].id);
+        localStorage.setItem('username', data[0].username);
+        this.navCtrl.setRoot(ConferenciasPage);
       }else{
         this.toastOpcion = {
           message: 'Usuario o contraseña incorrecta',

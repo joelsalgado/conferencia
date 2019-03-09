@@ -3,11 +3,19 @@
     <ion-title>
       Congreso
     </ion-title>
+    <ion-buttons end> <button  color="color1" (click)="salir()"> <ion-icon name="log-out"></ion-icon>  </button> </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="circles"
+      refreshingText="Actualizando...">
+    </ion-refresher-content>
+  </ion-refresher>
   <p align="center"><ion-img src="../assets/imgs/logoC.jpg" width="50" height="50"></ion-img></p>
   <p align="center" style="color: #07904d">1ER CONGRESO INTERINSTITUCIONAL</p>
   <p style="font-size: x-small;color: coral" align="center">FINES DE LA EDUCACIÓN EN EL SIGLO XXI Y MODELO EDUCATIVO PARA LA EDUCACIÓN OBLIGARIA EN MÉXICO</p>
